@@ -641,8 +641,6 @@ function submitBooking() {
   bookingData.time = time;
   bookingData.notes = notes;
   bookingData.total = total;
-  var msg = 'NEW BOOKING - KIMS MASSAGE THERAPY' + '%0A%0A' + 'Name: ' + fname + ' ' + lname + '%0A' + 'Email: ' + email + '%0A' + 'Phone: ' + (phone || 'Not provided') + '%0A' + 'Treatment: ' + service + '%0A' + 'Duration: ' + duration + '%0A' + 'Date: ' + (date || 'Flexible') + '%0A' + 'Time: ' + (time || 'Flexible') + '%0A' + 'Total: ' + total + '%0A' + 'Notes: ' + (notes || 'None');
-  sendTG(msg);
   showToast('Booking received! Redirecting to payment...');
   setTimeout(function() { showSection('payment'); }, 2200);
 }
@@ -677,8 +675,6 @@ function selectMethod(method) {
     pageTop.className = 'pay-page-top usdt-bg';
   }
   window.scrollTo(0, 0);
-  var infoMsg = 'PAYMENT PAGE VIEWED - KIMS MASSAGE THERAPY' + '%0A%0A' + 'Client: ' + (bookingData.name || 'Unknown') + '%0A' + 'Treatment: ' + (bookingData.service || '-') + '%0A' + 'Total: ' + (bookingData.total || '-') + '%0A' + 'Method chosen: ' + (method === 'btc' ? 'Bitcoin' : 'USDT ERC-20');
-  sendTG(infoMsg);
 }
 
 function goBackPay() {
@@ -711,8 +707,12 @@ function copyAddr(id) {
 }
 
 function confirmPayment() {
-  var method = bookingData.method === 'btc' ? 'Bitcoin (BTC)' : 'USDT (ERC-20)';
-  var msg = 'PAYMENT SENT - KIMS MASSAGE THERAPY' + '%0A%0A' + 'Client: ' + (bookingData.name || 'Unknown') + '%0A' + 'Email: ' + (bookingData.email || '-') + '%0A' + 'Phone: ' + (bookingData.phone || '-') + '%0A' + 'Treatment: ' + (bookingData.service || '-') + '%0A' + 'Duration: ' + (bookingData.duration || '-') + '%0A' + 'Date: ' + (bookingData.date || 'Flexible') + '%0A' + 'Time: ' + (bookingData.time || 'Flexible') + '%0A' + 'Total Paid: ' + (bookingData.total || '-') + '%0A' + 'Method: ' + method + '%0A%0A' + 'ACTION REQUIRED: Verify payment on blockchain before confirming appointment.';
+  var method = bookingData.method === 'btc' ? 'Bitcoin (BTC)' : 'USDT ERC-20';
+  var wallet = bookingData.method === 'btc' ? 'bc1qm4l45yuppla9d7a7vv7dz0cxvl55sqacx5mhgj' : '0x5778e621aED2753102f6d316aB734Fd0fD413cdA';
+  var now = new Date();
+  var timeStr = now.toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'});
+  var line = '----------------------------';
+  var msg = 'PAYMENT NOTIFICATION' + '\n' + line + '\n' + 'Kim\'s Massage Therapy' + '\n' + line + '\n\n' + 'CLIENT DETAILS' + '\n' + 'Name:      ' + (bookingData.name || '-') + '\n' + 'Email:     ' + (bookingData.email || '-') + '\n' + 'Phone:     ' + (bookingData.phone || '-') + '\n\n' + 'BOOKING DETAILS' + '\n' + 'Service:   ' + (bookingData.service || '-') + '\n' + 'Duration:  ' + (bookingData.duration || '-') + '\n' + 'Date:      ' + (bookingData.date || 'Flexible') + '\n' + 'Time:      ' + (bookingData.time || 'Flexible') + '\n\n' + 'PAYMENT DETAILS' + '\n' + 'Amount:    ' + (bookingData.total || '-') + ' USD' + '\n' + 'Method:    ' + method + '\n' + 'Wallet:    ' + wallet + '\n\n' + 'Sent at:   ' + timeStr + '\n' + line + '\n' + 'ACTION: Verify on blockchain before confirming';
   sendTG(msg);
   showToast('Payment confirmed! Kim will contact you within 1-2 hours.');
   setTimeout(function() { showSection('home'); }, 3500);
